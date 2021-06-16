@@ -1,0 +1,149 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "RentX Documentation",
+        "description": "This is an API Rent",
+        "version": "1.0.0",
+        "contact": {
+            "email": "pedromartins@frwk.com.br"
+        }
+    },
+    "paths": {
+        "/categories": {
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "sumary": "Create a Category",
+                "description": "Create a new Category",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "name": "Category Name Sample",
+                                    "description": "Category Description Sample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "500": {
+                        "description": "Category Already exists"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "List All Categories",
+                "description": "List all Created categories",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "Array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "description": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/import": {
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "sumary": "Upload a new category",
+                "description": "Upload a new category",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Imported!"
+                    }
+                }
+            }
+        },
+        "/specifications": {
+            "post": {
+                "tags": [
+                    "Specifications"
+                ],
+                "sumary": "Create a Specification",
+                "description": "Create a new Specification",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Specification"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created!"
+                    },
+                    "400": {
+                        "description": "Specification Already Exists!"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Specification": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
