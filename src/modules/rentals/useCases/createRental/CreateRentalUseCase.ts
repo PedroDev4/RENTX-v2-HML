@@ -1,22 +1,47 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
+import { Car } from "@modules/cars/infra/typeorm/model/Car";
+import { ICarsRepository } from "@modules/cars/repositories/ICarsRepository";
 import { ICreateRentalsDTO } from "@modules/rentals/DTOs/ICreateRentalsDTO";
 import { Rental } from "@modules/rentals/infra/typeorm/model/Rental";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
+import { IDateProvider } from "@shared/container/Providers/DateProvider/IDateProvider";
 import { AppError } from "@shared/errors/AppError";
+import { inject, injectable } from "tsyringe";
 
-dayjs.extend(utc);
+interface IResponse {
 
+    rental: {
+        id: string;
+        car_id: string;
+        user_id: string;
+        expected_return_date: Date;
+        created_at: Date;
+        updated_at: Date;
+        car: Car;
+    }
+}
+
+@injectable()
 class CreateRentalUseCase {
 
     constructor(
+        @inject("RentalsRepository")
         private rentalsRepository: IRentalsRepository,
+        @inject("CarsRepository")
+        private carsRepository: ICarsRepository,
+        @inject("DateProvider")
+        private dateProvider: IDateProvider,
     ) {
         //
     }
 
-    async execute({ user_id, car_id, expected_return_date }: ICreateRentalsDTO): Promise<Rental> {
+    async execute({ user_id, car_id, expected_return_date }: ICreateRentalsDTO): Promise<IResponse> {
         const minimumDuration = 24;
+
+        const car = await this.carsRepository.findById(car_id);
+
+        if (!car) {
+            throw new AppError("Car does not exists.");
+        }
 
         // Não deve ser possível cadastrar um novo aluguel caso já eista um aberto para o mesmo carro.
         const carUnavailable = await this.rentalsRepository.findOpenRentalByCarId(car_id);
@@ -33,27 +58,35 @@ class CreateRentalUseCase {
         }
 
         /* O aluguel deve ter duração mínima de 24 horas. */
-        const dateNow = dayjs().utc().local().format();
+        const dateNow = this.dateProvider.dateNow();
 
-        const expected_return_date_formated = dayjs(expected_return_date).utc().local().format();
-
-        const compareHours = dayjs(expected_return_date_formated).diff(dateNow, "hours");
+        const compareHours = this.dateProvider.compareInHours(dateNow, expected_return_date);
 
 
         if (compareHours < minimumDuration) {
             throw new AppError("Minimum rental duration is 24 hours.");
         }
 
-        const rental = await this.rentalsRepository.create({
+
+        const { id, created_at, updated_at } = await this.rentalsRepository.create({
             user_id,
             car_id,
             expected_return_date
         });
 
-        return rental
-
+        const rentalResponse: IResponse = {
+            rental: {
+                id,
+                car_id,
+                user_id,
+                expected_return_date,
+                created_at,
+                updated_at,
+                car
+            }
+        }
+        return rentalResponse
     }
-
 }
 
 export { CreateRentalUseCase };
