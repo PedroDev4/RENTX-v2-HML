@@ -1,7 +1,6 @@
 import { Car } from "@modules/cars/infra/typeorm/model/Car";
 import { ICarsRepository } from "@modules/cars/repositories/ICarsRepository";
 import { ICreateRentalsDTO } from "@modules/rentals/DTOs/ICreateRentalsDTO";
-import { Rental } from "@modules/rentals/infra/typeorm/model/Rental";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
 import { IDateProvider } from "@shared/container/Providers/DateProvider/IDateProvider";
 import { AppError } from "@shared/errors/AppError";
@@ -16,8 +15,8 @@ interface IResponse {
         expected_return_date: Date;
         created_at: Date;
         updated_at: Date;
-        car: Car;
     }
+    car: Car;
 }
 
 @injectable()
@@ -68,22 +67,15 @@ class CreateRentalUseCase {
         }
 
 
-        const { id, created_at, updated_at } = await this.rentalsRepository.create({
+        const rental = await this.rentalsRepository.create({
             user_id,
             car_id,
             expected_return_date
         });
 
         const rentalResponse: IResponse = {
-            rental: {
-                id,
-                car_id,
-                user_id,
-                expected_return_date,
-                created_at,
-                updated_at,
-                car
-            }
+            rental,
+            car
         }
         return rentalResponse
     }

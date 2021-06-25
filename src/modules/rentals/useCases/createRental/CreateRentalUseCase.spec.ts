@@ -31,16 +31,16 @@ describe("Create Rental", () => {
             category_id: "category1"
         });
 
-        const rental: ICreateRentalsDTO = {
+        const rentalCreate: ICreateRentalsDTO = {
             user_id: "1234",
             car_id: car.id,
             expected_return_date: dayAdd24Hours,
         }
 
-        const createdRental = await createRentalUseCase.execute(rental);
+        const { rental } = await createRentalUseCase.execute(rentalCreate);
 
-        expect(createdRental.rental).toHaveProperty("id");
-        expect(createdRental.rental).toHaveProperty("start_date");
+        expect(rental).toHaveProperty("id");
+        expect(rental).toHaveProperty("start_date");
     });
 
     it("Should NOT be able to create a new rental with an unavailable Car", async () => {
