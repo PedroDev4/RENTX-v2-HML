@@ -103,21 +103,28 @@ describe("Create Rental", () => {
             }
 
             await createRentalUseCase.execute(rental3);
-        }).rejects.toBe(new AppError("There's a rental in progress to user."));
+        }).rejects.toEqual(new AppError("There's a rental in progress to user."));
 
     });
 
     it("Should NOT be able to create a new rental with an invalid return time", async () => {
-        expect(async () => {
+        const car4 = await carsRepositoryInMemory.create({
+            name: "Name Car3",
+            description: "Description Car3",
+            daily_rate: 100,
+            fine_amount: 60,
+            license_plate: "1234",
+            brand: "Car Brand3",
+            category_id: "category3"
+        });
 
-            const rental: ICreateRentalsDTO = {
-                user_id: "444",
-                car_id: "321",
+        await expect(
+            createRentalUseCase.execute({
+                user_id: "123",
+                car_id: car4.id,
                 expected_return_date: dayjs().toDate(),
-            }
-
-            await createRentalUseCase.execute(rental);
-        }).rejects.toBe(new AppError("Minimum rental duration is 24 hours."));
+            })
+        ).rejects.toEqual(new AppError("Minimum rental duration is 24 hours."));
 
     });
 

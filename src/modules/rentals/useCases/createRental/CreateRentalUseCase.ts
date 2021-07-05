@@ -66,6 +66,7 @@ class CreateRentalUseCase {
             throw new AppError("Minimum rental duration is 24 hours.");
         }
 
+        car.available = false;
 
         const rental = await this.rentalsRepository.create({
             user_id,

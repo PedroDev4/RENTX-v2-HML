@@ -6,7 +6,7 @@ import { hash } from "bcryptjs";
 import { v4 } from "uuid";
 
 let connection: Connection;
-describe("Create Category Controller", () => {
+describe("List categories Controller", () => {
 
     beforeAll(async () => {
         // Criando variavel para receber conexão da função do index.ts que retorna uma Connection
@@ -24,49 +24,35 @@ describe("Create Category Controller", () => {
         );
     });
 
+    it("Should be able to list all categories", async () => {
+        const responseToken = await request(app).post("/sessions").send({
+            email: "admin@rentx.com.br",
+            password: "admin",
+            driver_license: "XXXXX"
+        });
+
+        const { token } = responseToken.body;
+
+        await request(app).post("/categories")
+            .send({
+                name: "Category Supertest",
+                description: "Category Supertest"
+            }).set({
+                Authorization: `Bearer ${token}`
+            });
+
+        const responseAll = await request(app).get("/categories")
+            .set({
+                Authorization: `Bearer ${token}`
+            });
+
+        expect(responseAll.status).toBe(200);
+        expect(responseAll.body).toHaveLength(1);
+    });
+
     afterAll(async () => {
         await connection.dropDatabase();
         await connection.close();
-    });
-
-    it("Should be able to create a category by end2end", async () => {
-        const responseToken = await request(app).post("/sessions").send({
-            email: "admin@rentx.com.br",
-            password: "admin",
-            driver_license: "XXXXX"
-        });
-
-        const { token } = responseToken.body;
-
-        const response = await request(app).post("/categories")
-            .send({
-                name: "Category Supertest",
-                description: "Category Supertest"
-            }).set({
-                Authorization: `Bearer ${token}`
-            })
-
-        expect(response.status).toBe(201);
-    });
-
-    it("Should NOT be able to create a category with an already existing name", async () => {
-        const responseToken = await request(app).post("/sessions").send({
-            email: "admin@rentx.com.br",
-            password: "admin",
-            driver_license: "XXXXX"
-        });
-
-        const { token } = responseToken.body;
-
-        const response = await request(app).post("/categories")
-            .send({
-                name: "Category Supertest",
-                description: "Category Supertest"
-            }).set({
-                Authorization: `Bearer ${token}`
-            })
-
-        expect(response.status).toBe(400);
     });
 
 });
