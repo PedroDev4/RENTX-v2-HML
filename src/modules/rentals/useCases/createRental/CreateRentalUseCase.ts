@@ -66,19 +66,20 @@ class CreateRentalUseCase {
             throw new AppError("Minimum rental duration is 24 hours.");
         }
 
-        car.available = false;
-
         const rental = await this.rentalsRepository.create({
             user_id,
             car_id,
             expected_return_date
         });
 
+        await this.carsRepository.updateAvailableStandard(car_id, false);
+
         const rentalResponse: IResponse = {
             rental,
             car
         }
-        return rentalResponse
+
+        return rentalResponse;
     }
 }
 

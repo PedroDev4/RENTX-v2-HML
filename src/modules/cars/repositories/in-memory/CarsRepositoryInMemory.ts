@@ -3,7 +3,6 @@ import { Car } from "@modules/cars/infra/typeorm/model/Car";
 import { ICarsRepository } from "../ICarsRepository";
 
 class CarsRepositoryInMemory implements ICarsRepository {
-
     private cars: Car[] = []
 
     async create({ name, description, daily_rate, license_plate, brand, fine_amount, category_id, specifications, id }: ICreateCarDTO): Promise<Car> {
@@ -44,6 +43,16 @@ class CarsRepositoryInMemory implements ICarsRepository {
     async findById(car_id: string): Promise<Car> {
         const car = this.cars.find((car) => car.id === car_id);
         return car;
+    }
+
+    async updateAvailableQueryBuilder(car_id: string, available: boolean): Promise<void> {
+        const carIndex = this.cars.findIndex((car) => car.id === car_id);
+        this.cars[carIndex].available = available;
+    }
+
+    async updateAvailableStandard(car_id: string, available: boolean): Promise<void> {
+        const carIndex = this.cars.findIndex((car) => car.id === car_id);
+        this.cars[carIndex].available = available;
     }
 
 }

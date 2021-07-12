@@ -4,7 +4,6 @@ import { IRentalsRepository } from "../IRentalsRepository";
 
 
 class RentalsRepositoryInMemory implements IRentalsRepository {
-
     private rentals: Rental[] = [];
 
     async create({ user_id, car_id, expected_return_date }: ICreateRentalsDTO): Promise<Rental> {
@@ -30,6 +29,13 @@ class RentalsRepositoryInMemory implements IRentalsRepository {
     async findByOpenRentalByUser(user_id: string): Promise<Rental> {
         const rental = this.rentals.find((rental) => rental.user_id === user_id && !rental.end_date);
         return rental;
+    }
+
+    async findById(id: string): Promise<Rental> {
+        return this.rentals.find((rental) => rental.id === id);
+    }
+    async findByUserId(user_id: string): Promise<Rental[]> {
+        return this.rentals.filter((rental) => rental.user_id === user_id);
     }
 
 }
