@@ -3,10 +3,13 @@ import { verify } from "jsonwebtoken";
 
 import { AppError } from "@shared/errors/AppError";
 import { UsersRepository } from "@modules/accounts/infra/typeorm/repositories/UsersRepository";
+import { UsersTokensRepository } from "@modules/accounts/infra/typeorm/repositories/UsersTokensRepository";
+import auth from "@config/auth";
 
 interface ITokenPayLoad {
     sub: string;
 }
+
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export async function ensureAuthenticated(
@@ -16,6 +19,8 @@ export async function ensureAuthenticated(
 ) {
     const authHeader = request.headers.authorization;
 
+    const usersTokensRepository = new UsersTokensRepository();
+
     if (!authHeader) {
         throw new AppError("Token Missing!", 401);
     }
@@ -23,18 +28,24 @@ export async function ensureAuthenticated(
     // ["Bearer","Jyeisjaeesajn32u3kskj2sa"];
     // [0]  = Bearer
     // [1] = Jyeisjaeesajn32u3kskj2sa
-    const [, token] = authHeader.split(" "); // ["Bearer" "Jyeisjaeesajn32u3kskj2sa"]]
+    const [, token] = authHeader.split(" ");
 
     // Verify if token is valid
 
     try {
         const { sub: user_id } = verify(
             token,
-            "f81243572aa4c126aaba36b59496d48f"
+            auth.secret_refresh_token
         ) as ITokenPayLoad;
 
         const usersRepository = new UsersRepository();
         const user = await usersRepository.findById(user_id);
+
+        const userToken = await usersTokensRepository.findByUserIdAndRefreshToken(user_id, token);
+
+        if (!userToken) {
+            throw new AppError("Invalid Refresh Token provided", 401);
+        }
 
         if (!user) {
             throw new AppError("User does not Exists!", 401);

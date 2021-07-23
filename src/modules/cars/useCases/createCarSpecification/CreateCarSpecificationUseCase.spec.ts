@@ -59,7 +59,7 @@ describe("Create car Specification", () => {
             const specifications_id = [specification.id];
 
             await createCarSpecificationUseCase.execute({ car_id, specifications_id });
-        }).rejects.toBe(new AppError("Car does not exists"))
+        }).rejects.toStrictEqual(new AppError("Car does not exists"))
     });
 
     it("Should NOT be able to add a non-existent specification to the car", async () => {
@@ -78,7 +78,7 @@ describe("Create car Specification", () => {
             const specifications_id = ["321"];
 
             await createCarSpecificationUseCase.execute({ car_id, specifications_id });
-        }).rejects.toBe(new AppError("Car does not exists"))
+        }).rejects.toStrictEqual(new AppError("Car does not exists"))
     });
 
 });

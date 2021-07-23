@@ -41,7 +41,6 @@ class UsersRepository implements IUsersRepository {
         const user = await this.repository.findOne({
             where: { email, driver_license },
         });
-        console.log(user);
 
         return user;
     }
