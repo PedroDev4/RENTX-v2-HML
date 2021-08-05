@@ -1,3 +1,4 @@
+import { UsersTokensRepository } from "@modules/accounts/infra/typeorm/repositories/UsersTokensRepository";
 import { AppError } from "@shared/errors/AppError";
 
 import { ICreateUserDTO } from "../../DTOs/ICreateUserDTO";
@@ -8,10 +9,12 @@ import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let usersRepositoryInMemory: UsersRepositoryInMemory;
 let createUserUseCase: CreateUserUseCase;
+let usersTokensRepositoryInMemory: UsersTokensRepository;
 
 describe("Authenticate User", () => {
     beforeEach(() => {
         usersRepositoryInMemory = new UsersRepositoryInMemory();
+        usersTokensRepository
         createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory);
         authenticateUserUseCase = new AuthenticateUserUseCase(
             usersRepositoryInMemory

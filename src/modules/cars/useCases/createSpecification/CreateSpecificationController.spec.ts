@@ -35,15 +35,15 @@ describe("Create Specification Controller", () => {
             driver_license: "XXXXX"
         });
 
-        const { token } = responseToken.body;
-        console.log(token);
+        const { refresh_token } = responseToken.body;
+        console.log(refresh_token);
 
         const response = await request(app).post("/specifications")
             .send({
                 name: "Specification Test",
                 description: "Specification Supertest",
             }).set({
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${refresh_token}`
             });
 
         console.log(response.body);

@@ -31,19 +31,19 @@ describe("List categories Controller", () => {
             driver_license: "XXXXX"
         });
 
-        const { token } = responseToken.body;
+        const { refresh_token } = responseToken.body;
 
         await request(app).post("/categories")
             .send({
                 name: "Category Supertest",
                 description: "Category Supertest"
             }).set({
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${refresh_token}`
             });
 
         const responseAll = await request(app).get("/categories")
             .set({
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${refresh_token}`
             });
 
         expect(responseAll.status).toBe(200);
