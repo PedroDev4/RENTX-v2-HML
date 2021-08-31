@@ -1,4 +1,6 @@
 import { UsersTokensRepository } from "@modules/accounts/infra/typeorm/repositories/UsersTokensRepository";
+import { UsersTokensRepositoryInMemory } from "@modules/accounts/repositories/in-memory/UsersTokensRepositoryInMemory";
+import { DayjsDateProvider } from "@shared/container/Providers/DateProvider/implementations/DayjsDateProvider";
 import { AppError } from "@shared/errors/AppError";
 
 import { ICreateUserDTO } from "../../DTOs/ICreateUserDTO";
@@ -9,15 +11,17 @@ import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let usersRepositoryInMemory: UsersRepositoryInMemory;
 let createUserUseCase: CreateUserUseCase;
-let usersTokensRepositoryInMemory: UsersTokensRepository;
+let usersTokensRepositoryInMemory: UsersTokensRepositoryInMemory;
+let dateProvider: DayjsDateProvider;
 
 describe("Authenticate User", () => {
     beforeEach(() => {
         usersRepositoryInMemory = new UsersRepositoryInMemory();
-        usersTokensRepository
+        usersTokensRepositoryInMemory = new UsersTokensRepositoryInMemory();
+        dateProvider = new DayjsDateProvider();
         createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory);
         authenticateUserUseCase = new AuthenticateUserUseCase(
-            usersRepositoryInMemory
+            usersRepositoryInMemory, usersTokensRepositoryInMemory, dateProvider
         );
     });
 
@@ -38,6 +42,7 @@ describe("Authenticate User", () => {
         });
 
         expect(result).toHaveProperty("token");
+        expect(result).toHaveProperty("refresh_token");
     });
 
     it("Should NOT be able to authenticate a nonexistent user", () => {

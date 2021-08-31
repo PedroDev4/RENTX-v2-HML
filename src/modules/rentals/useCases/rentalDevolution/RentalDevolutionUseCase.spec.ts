@@ -47,7 +47,12 @@ describe("Rentals Devolution", () => {
             expected_return_date: dayAdd24Hours
         });
 
-        const rentalDevolution = await rentalDevolutionUseCase.execute({ rental_id: rental.id, user_id: user.id });
+        const rentalDevolutionParameters = {
+            rental_id: rental.id,
+            user_id: user.id,
+        }
+
+        const rentalDevolution = await rentalDevolutionUseCase.execute(rentalDevolutionParameters);
         console.log(rentalDevolution);
 
         expect(rentalDevolution).toHaveProperty("total");
