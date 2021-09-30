@@ -21,9 +21,8 @@ class SendForgotPasswordMailUseCase {
         private mailProvider: IMailProvider
     ) { }
 
-    async execute(to_email: string, driver_license: string) {
+    async execute(to_email: string, driver_license: string): Promise<void> {
         const expires_in_mail = 3;
-
 
         const template_path = resolve(__dirname, "../", "../", "views", "emails", "forgotPassword.hbs");
 

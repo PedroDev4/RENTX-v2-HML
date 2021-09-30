@@ -47,8 +47,8 @@ export async function ensureAuthenticated(
             throw new AppError("Invalid Refresh Token provided", 401);
         }
 
-        if (!user) {
-            throw new AppError("User does not Exists!", 401);
+        if (!user || !user.isVerified) {
+            throw new AppError("User does not Exists or is not verified", 401);
         }
 
         request.user = {

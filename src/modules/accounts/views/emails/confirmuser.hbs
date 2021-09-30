@@ -1,0 +1,47 @@
+<style>
+    .container {
+        width: 800px;
+        font-family: Arial, Helvetica, sans-serif;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        border: 2px solid;
+        border-radius: 10px;
+        border-color: blueviolet;
+        box-shadow: 5px 5px 4px;
+    }
+
+    span {
+        margin: 10px
+    }
+
+    .divLink {
+        width: 500px;
+        border: 2px solid;
+        border-radius: 11px;
+        border-color: aqua;
+    }
+</style>
+
+<div class="container">
+    <img src="https://i.imgur.com/oUAKMC5.png">
+
+    <span> Oi, {{name}}! </span>
+    <br>
+
+    <span> Seja bem-vindo(a) a plataforma de locação de carros RentX </span>
+    <span> Precisamos que você confirme seu email, clique no link abaixo: </span>
+
+    <div class="divLink">
+
+        <a href="{{link}}"> {{link}} </a>
+
+    </div>
+
+    <span> Caso não tenha sido você que criou uma nova conta na plataforma, basta <b>ignorar</b> este e-mail. </span>
+
+    <strong> <ins> Obrigado </ins>! </strong>
+
+    <h3> <strong> Equipe | <strong> RentX </strong> </h3>
+
+</div>

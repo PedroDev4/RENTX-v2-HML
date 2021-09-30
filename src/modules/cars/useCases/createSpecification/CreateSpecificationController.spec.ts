@@ -36,7 +36,6 @@ describe("Create Specification Controller", () => {
         });
 
         const { refresh_token } = responseToken.body;
-        console.log(refresh_token);
 
         const response = await request(app).post("/specifications")
             .send({
@@ -45,8 +44,6 @@ describe("Create Specification Controller", () => {
             }).set({
                 Authorization: `Bearer ${refresh_token}`
             });
-
-        console.log(response.body);
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('id');

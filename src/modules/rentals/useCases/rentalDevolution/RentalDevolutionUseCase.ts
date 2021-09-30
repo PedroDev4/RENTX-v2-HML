@@ -42,7 +42,7 @@ class RentalDevolutionUseCase {
         const dateNow = this.dateProvider.dateNow();
 
         let rentalDaily = this.dateProvider.compareInDays(rental.start_date, dateNow); // Quantidade de Diárias do aluguel
-        const delayedDays = this.dateProvider.compareInDays(dateNow, rental.expected_return_date);
+        const delayedDays = this.dateProvider.compareInDays(rental.expected_return_date, dateNow);
 
         if (rentalDaily <= 0) {
             rentalDaily = minimumDaily;

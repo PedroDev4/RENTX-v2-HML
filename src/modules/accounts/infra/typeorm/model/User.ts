@@ -1,6 +1,5 @@
 import { Entity, PrimaryColumn, CreateDateColumn, Column } from "typeorm";
 import { v4 as uuid } from "uuid";
-
 @Entity("users")
 class User {
     @PrimaryColumn()
@@ -23,6 +22,9 @@ class User {
 
     @Column()
     avatar: string;
+
+    @Column()
+    isVerified?: boolean;
 
     @CreateDateColumn()
     created_at: Date;

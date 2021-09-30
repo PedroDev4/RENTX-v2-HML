@@ -53,7 +53,6 @@ describe("Rentals Devolution", () => {
         }
 
         const rentalDevolution = await rentalDevolutionUseCase.execute(rentalDevolutionParameters);
-        console.log(rentalDevolution);
 
         expect(rentalDevolution).toHaveProperty("total");
         expect(rentalDevolution).toHaveProperty("end_date");

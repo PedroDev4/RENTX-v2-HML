@@ -34,8 +34,6 @@ class RentalsRepository implements IRentalsRepository {
             ]
         });
 
-        console.log(rental);
-
         return rental;
     }
 
@@ -45,8 +43,6 @@ class RentalsRepository implements IRentalsRepository {
                 { user_id: user_id, end_date: null }
             ]
         });
-
-        console.log(rental);
 
         return rental;
     }

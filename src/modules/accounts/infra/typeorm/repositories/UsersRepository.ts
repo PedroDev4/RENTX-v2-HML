@@ -1,10 +1,8 @@
 import { ICreateUserDTO } from "@modules/accounts/DTOs/ICreateUserDTO";
+import { IUpdateUserDTO } from "@modules/accounts/DTOs/IUpdateUserDTO";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { getRepository, Repository } from "typeorm";
 import { User } from "../model/User";
-
-
-
 class UsersRepository implements IUsersRepository {
     private repository: Repository<User>;
 
@@ -19,6 +17,7 @@ class UsersRepository implements IUsersRepository {
         driver_license,
         avatar,
         id,
+        isVerified
     }: ICreateUserDTO): Promise<User> {
         const user = this.repository.create({
             name,
@@ -27,6 +26,7 @@ class UsersRepository implements IUsersRepository {
             driver_license,
             avatar,
             id,
+            isVerified
         });
 
         await this.repository.save(user);
@@ -48,6 +48,16 @@ class UsersRepository implements IUsersRepository {
     async findById(id: string): Promise<User> {
         const user = await this.repository.findOne({ id });
         return user;
+    }
+
+    async update(user: IUpdateUserDTO): Promise<void> {
+        await this.repository.update(user.id, user);
+    }
+
+    async updateIsVerified(id: string, isVerified: boolean): Promise<void> {
+        await this.repository.update(id, {
+            isVerified
+        });
     }
 }
 

@@ -40,7 +40,7 @@ describe("Create Category Controller", () => {
 
         const response = await request(app).post("/categories")
             .send({
-                name: "Category Supertest",
+                name: "Category Supertest Create",
                 description: "Category Supertest"
             }).set({
                 Authorization: `Bearer ${refresh_token}`
@@ -58,13 +58,21 @@ describe("Create Category Controller", () => {
 
         const { refresh_token } = responseToken.body;
 
-        const response = await request(app).post("/categories")
+        await request(app).post("/categories")
             .send({
-                name: "Category Supertest",
+                name: "Category Supertest error",
                 description: "Category Supertest"
             }).set({
                 Authorization: `Bearer ${refresh_token}`
-            })
+            });
+
+        const response = await request(app).post("/categories")
+            .send({
+                name: "Category Supertest error",
+                description: "Category Supertest"
+            }).set({
+                Authorization: `Bearer ${refresh_token}`
+            });
 
         expect(response.status).toBe(400);
     });
