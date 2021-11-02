@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { FindUserByEmailAndDriverLicence } from "./FindUserByEmailAndDriverLicenseUseCase";
+import { FindUserByEmailAndDriverLicenceUseCase } from "./FindUserByEmailAndDriverLicenseUseCase";
 
 class FindUserByEmailAndDriverLicenseController {
 
@@ -8,7 +8,7 @@ class FindUserByEmailAndDriverLicenseController {
 
         const { email, driver_license } = request.query;
 
-        const findUserByEmailAndDriverLicenseUseCase = container.resolve(FindUserByEmailAndDriverLicence);
+        const findUserByEmailAndDriverLicenseUseCase = container.resolve(FindUserByEmailAndDriverLicenceUseCase);
 
         const user = await findUserByEmailAndDriverLicenseUseCase.execute(String(email), String(driver_license));
 

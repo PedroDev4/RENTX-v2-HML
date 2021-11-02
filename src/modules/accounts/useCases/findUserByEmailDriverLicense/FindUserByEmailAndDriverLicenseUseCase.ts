@@ -5,7 +5,7 @@ import { User } from "@modules/accounts/infra/typeorm/model/User";
 
 
 @injectable()
-class FindUserByEmailAndDriverLicence {
+class FindUserByEmailAndDriverLicenceUseCase {
 
     constructor(
         @inject("UsersRepository")
@@ -25,4 +25,4 @@ class FindUserByEmailAndDriverLicence {
 
 }
 
-export { FindUserByEmailAndDriverLicence };
+export { FindUserByEmailAndDriverLicenceUseCase };

@@ -37,13 +37,13 @@ describe('Create Rental Controller ', () => {
             driver_license: "XXXXX"
         });
 
-        const { refresh_token } = responseToken.body;
+        const { token } = responseToken.body;
 
         const responseCategory = await request(app).post('/categories').send({
             name: "Carro Econômico",
             description: "Categoria de Carros Econômicos"
         }).set({
-            Authorization: `Bearer ${refresh_token}`
+            Authorization: `Bearer ${token}`
         });
 
         const { id } = responseCategory.body;
@@ -57,16 +57,16 @@ describe('Create Rental Controller ', () => {
             brand: "Honda",
             category_id: `${id}`
         }).set({
-            Authorization: `Bearer ${refresh_token}`
+            Authorization: `Bearer ${token}`
         })
 
         const { id: car_id } = responseCar.body;
 
         const responseRental = await request(app).post('/rentals').send({
             car_id: `${car_id}`,
-            expected_return_date: "2021-09-15T18:43:19.172Z"
+            expected_return_date: "2021-11-30T18:43:19.172Z"
         }).set({
-            Authorization: `Bearer ${refresh_token}`
+            Authorization: `Bearer ${token}`
         })
 
         expect(responseRental.status).toBe(201);

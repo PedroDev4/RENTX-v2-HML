@@ -36,14 +36,14 @@ describe("Create Category Controller", () => {
             driver_license: "XXXXX"
         });
 
-        const { refresh_token } = responseToken.body;
+        const { token } = responseToken.body;
 
         const response = await request(app).post("/categories")
             .send({
                 name: "Category Supertest Create",
                 description: "Category Supertest"
             }).set({
-                Authorization: `Bearer ${refresh_token}`
+                Authorization: `Bearer ${token}`
             })
 
         expect(response.status).toBe(201);
@@ -56,14 +56,14 @@ describe("Create Category Controller", () => {
             driver_license: "XXXXX"
         });
 
-        const { refresh_token } = responseToken.body;
+        const { token } = responseToken.body;
 
         await request(app).post("/categories")
             .send({
                 name: "Category Supertest error",
                 description: "Category Supertest"
             }).set({
-                Authorization: `Bearer ${refresh_token}`
+                Authorization: `Bearer ${token}`
             });
 
         const response = await request(app).post("/categories")
@@ -71,7 +71,7 @@ describe("Create Category Controller", () => {
                 name: "Category Supertest error",
                 description: "Category Supertest"
             }).set({
-                Authorization: `Bearer ${refresh_token}`
+                Authorization: `Bearer ${token}`
             });
 
         expect(response.status).toBe(400);
