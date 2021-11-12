@@ -71,6 +71,6 @@ describe("Authenticate User", () => {
                 password: "123",
                 driver_license: user.driver_license,
             });
-        }).rejects.toBe(new AppError("Email or password Incorret."));
+        }).rejects.toStrictEqual(new AppError("Email or password Incorret."));
     });
 });

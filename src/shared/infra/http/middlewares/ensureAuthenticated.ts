@@ -30,11 +30,23 @@ export async function ensureAuthenticated(
 
     // Verify if token is valid
 
+    const usersRepository = new UsersRepository();
+
     try {
         const { sub: user_id } = verify(
             token,
             auth.secret_token
         ) as ITokenPayLoad;
+
+        const user = await usersRepository.findById(user_id);
+
+        if (!user) {
+            throw new AppError('User does not exists', 401);
+
+        } else if (!user.isVerified) {
+
+            throw new AppError('User is not verified', 401);
+        }
 
         request.user = {
             // Passando o obejeto "user" para nossa requisição "pra frente"
@@ -42,7 +54,7 @@ export async function ensureAuthenticated(
         };
 
         next();
-    } catch {
-        throw new AppError("Invalid Token!", 401);
+    } catch (err) {
+        throw new AppError(`Invalid Token. ${err.message}`, 401);
     }
 }

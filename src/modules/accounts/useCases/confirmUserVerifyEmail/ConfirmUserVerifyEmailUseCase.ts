@@ -7,6 +7,7 @@ import { resolve } from 'path';
 import auth from "@config/auth";
 import { IDateProvider } from "@shared/container/Providers/DateProvider/IDateProvider";
 import { IMailProvider } from "@shared/container/Providers/MailProvider/IMailProvider";
+import { v1 as uuid } from "uuid";
 
 @injectable()
 class ConfirmUserVerifyEmailUseCase {
@@ -23,7 +24,7 @@ class ConfirmUserVerifyEmailUseCase {
     ) { }
 
     async execute(id: string, email: string): Promise<void> {
-        const expires_date_mail = 1;
+        const expires_date_mail = 2;
 
         const newUser = await this.usersRepository.findById(id);
 
@@ -38,12 +39,9 @@ class ConfirmUserVerifyEmailUseCase {
 
         const template_path = resolve(__dirname, '../', "../", 'views', 'emails', 'confirmuser.hbs');
 
-        const token = sign({ email }, auth.secret_token_verify_user, {
-            subject: newUser.id,
-            expiresIn: "1d"
-        });
+        const token = uuid();
 
-        const expires_date = String(this.dateProvider.addDays(expires_date_mail));
+        const expires_date = String(this.dateProvider.addHours(expires_date_mail));
 
         await this.usersTokensRepository.create({
             expires_date,
