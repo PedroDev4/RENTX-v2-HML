@@ -9,9 +9,11 @@ export default {
         filename(request, file, callback) {
             //const fileHash = crypto.randomBytes(10).toString('hex');
             //const fileName = `${fileHash}-${file.originalname}`;
-            const fileName = file.originalname;
 
-            return callback(null, fileName)
+            const fileName = file.originalname;
+            const fileNameParsed = fileName.replace(/\s+/g, '');
+
+            return callback(null, fileNameParsed);
         }
     }),
 }
