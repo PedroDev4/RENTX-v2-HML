@@ -1,9 +1,13 @@
-import { User } from "@modules/accounts/infra/typeorm/model/User";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 
+interface IResponseData {
+    id: string;
+    name: string;
+    email: string;
+}
 
 @injectable()
 class ConfirmUserValidationUseCase {
@@ -15,7 +19,7 @@ class ConfirmUserValidationUseCase {
         private usersRepository: IUsersRepository
     ) { }
 
-    async execute(token: string): Promise<User> {
+    async execute(token: string): Promise<IResponseData> {
 
         const userToken = await this.usersTokensRepository.FindByRefreshToken(token);
 
@@ -23,11 +27,16 @@ class ConfirmUserValidationUseCase {
             throw new AppError('UserToken does not exists')
         }
 
+        console.log(token);
         const user = await this.usersRepository.findById(userToken.user_id);
 
         await this.usersRepository.updateIsVerified(user.id, true);
 
-        return user;
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email
+        };
     }
 
 }

@@ -36,7 +36,11 @@ describe("Create Category Controller", () => {
             driver_license: "XXXXX"
         });
 
-        const { token } = responseToken.body;
+        const { token, refresh_token } = responseToken.body;
+
+        await request(app).put('/sessions/confirmUser').query({
+            token: refresh_token
+        });
 
         const response = await request(app).post("/categories")
             .send({
@@ -56,7 +60,11 @@ describe("Create Category Controller", () => {
             driver_license: "XXXXX"
         });
 
-        const { token } = responseToken.body;
+        const { token, refresh_token } = responseToken.body;
+
+        await request(app).put('/sessions/confirmUser').query({
+            token: refresh_token
+        });
 
         await request(app).post("/categories")
             .send({

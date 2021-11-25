@@ -37,7 +37,11 @@ describe('Create Rental Controller ', () => {
             driver_license: "XXXXX"
         });
 
-        const { token } = responseToken.body;
+        const { token, refresh_token } = responseToken.body;
+
+        await request(app).put('/sessions/confirmUser').query({
+            token: refresh_token
+        });
 
         const responseCategory = await request(app).post('/categories').send({
             name: "Carro Econômico",
