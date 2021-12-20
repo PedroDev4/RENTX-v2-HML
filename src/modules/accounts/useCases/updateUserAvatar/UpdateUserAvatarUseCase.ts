@@ -5,9 +5,9 @@
 // Criar controller
 
 import { inject, injectable } from "tsyringe";
-import crypto from 'crypto';
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { IStorageProvider } from "@shared/container/Providers/StorageProvider/IStorageProvider";
+import { hashFile } from "@utils/fileHash";
 
 interface IRequest {
     user_id: string;
@@ -32,8 +32,7 @@ class UpdateUserAvatarUseCase {
 
         await this.storageProvider.save(avatarFile, "avatar");
 
-        const fileHash = crypto.randomBytes(10).toString('hex');
-        avatarFile = `${fileHash}-${avatarFile}`;
+        avatarFile = hashFile(avatarFile);
 
         user.avatar = avatarFile; // reAssignment do valor do objeto 
 

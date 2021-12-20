@@ -18,7 +18,7 @@ describe('Create Rental Controller ', () => {
         const password = await hash('admin', 8);
 
         await connection.query(
-            `INSERT INTO USERS(id, name, email, password, "isAdmin", created_at, driver_license)VALUES('${id}','admin','admin@rentx.com.br','${password}', true, 'now()', 'XXXXX')`
+            `INSERT INTO USERS(id, name, email, password, "isAdmin", created_at, driver_license, "isVerified")VALUES('${id}','admin','admin@rentx.com.br','${password}', true, 'now()', 'XXXXX', true)`
         );
 
     });
@@ -37,10 +37,10 @@ describe('Create Rental Controller ', () => {
             driver_license: "XXXXX"
         });
 
-        const { token, refresh_token } = responseToken.body;
+        const { token } = responseToken.body;
 
         await request(app).put('/sessions/confirmUser').query({
-            token: refresh_token
+            token: token
         });
 
         const responseCategory = await request(app).post('/categories').send({
@@ -68,7 +68,7 @@ describe('Create Rental Controller ', () => {
 
         const responseRental = await request(app).post('/rentals').send({
             car_id: `${car_id}`,
-            expected_return_date: "2021-11-30T18:43:19.172Z"
+            expected_return_date: "2022-01-25T18:43:19.172Z"
         }).set({
             Authorization: `Bearer ${token}`
         })

@@ -12,6 +12,7 @@ class UsersRepositoryInMemory implements IUsersRepository {
         driver_license,
         password,
         isVerified,
+        avatar
     }: ICreateUserDTO): Promise<User> {
         const user = new User();
 
@@ -20,7 +21,8 @@ class UsersRepositoryInMemory implements IUsersRepository {
             name,
             driver_license,
             password,
-            isVerified
+            isVerified,
+            avatar
         });
 
         this.users.push(user);

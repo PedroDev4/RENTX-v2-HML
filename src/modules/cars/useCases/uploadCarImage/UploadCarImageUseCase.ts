@@ -3,6 +3,7 @@ import { inject, injectable } from "tsyringe";
 import { deleteFile } from "@utils/fileDelete";
 import multerConfig from "@config/upload"
 import fs from "fs";
+import { IStorageProvider } from "@shared/container/Providers/StorageProvider/IStorageProvider";
 
 
 interface IRequest {
@@ -15,7 +16,9 @@ class UploadCarImageUseCase {
 
     constructor(
         @inject("CarsImagesRepository")
-        private carsImagesRepository: ICarsImagesRepository
+        private carsImagesRepository: ICarsImagesRepository,
+        @inject("StorageProvider")
+        private storageProvider: IStorageProvider
     ) {
         //
     }
@@ -34,7 +37,9 @@ class UploadCarImageUseCase {
             await this.carsImagesRepository.create(
                 car_id,
                 image
-            )
+            );
+
+            await this.storageProvider.save(image, 'cars');
         });
 
     }

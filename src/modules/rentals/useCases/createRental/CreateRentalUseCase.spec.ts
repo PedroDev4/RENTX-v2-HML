@@ -11,7 +11,7 @@ let rentalsRepositoryInMemory: RentalsRepositoryInMemory;
 let dayjsDateProvider: DayjsDateProvider;
 let carsRepositoryInMemory: CarsRepositoryInMemory;
 describe("Create Rental", () => {
-    const dayAdd24Hours = dayjs().add(1, "day").utc().toDate();
+    const dayAdd24Hours = dayjs().add(3, "day").utc().toDate();
     beforeEach(() => {
         rentalsRepositoryInMemory = new RentalsRepositoryInMemory();
         carsRepositoryInMemory = new CarsRepositoryInMemory();

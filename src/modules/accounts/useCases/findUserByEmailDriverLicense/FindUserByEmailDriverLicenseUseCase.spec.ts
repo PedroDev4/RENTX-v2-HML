@@ -20,9 +20,10 @@ describe("Find User By Email and Driver License", () => {
             email: "user@tester.com",
             password: "1212",
             name: "User tester",
+            avatar: "15248-JeffFranklin"
         };
 
-        const userCreated = await createUserUseCase.execute(userDTO);
+        const userCreated = await usersRepositoryInMemory.create(userDTO);
 
         const userFinded = await findUserByEmailAndDriverLicenseUsecase.execute(userDTO.email, userDTO.driver_license);
 

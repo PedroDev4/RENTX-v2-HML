@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
 import createConnection from "../database"
@@ -8,6 +9,7 @@ import { AppError } from "@shared/errors/AppError";
 
 import { router } from "./routes";
 import swaggerFile from "./../../../swagger.json";
+import upload from "@config/upload";
 
 createConnection();
 const app = express();
@@ -15,6 +17,9 @@ const app = express();
 app.use(express.json());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile)); // Passando Rota para acessar a Doc, Passando o Server Swagger, e o setup do swagger
+
+app.use("/avatar", express.static(`${upload.directory}/avatar`));
+app.use("/cars", express.static(`${upload.directory}/cars`));
 
 app.use(router);
 

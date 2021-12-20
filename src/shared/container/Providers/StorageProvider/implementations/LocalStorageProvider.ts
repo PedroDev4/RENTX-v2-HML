@@ -7,7 +7,7 @@ import multerConfig from '@config/upload';
 class LocalStorageProvider implements IStorageProvider {
 
     async save(file: string, folder: string): Promise<string> {
-        await fs.promises.rename(
+        await fs.promises.rename( // Função rename == Ctrl + X de um lugar para o outro
             resolve(multerConfig.directory, file), // FROM
             resolve(`${multerConfig.directory}/${folder}`, file) // PARA ONDE
         );
